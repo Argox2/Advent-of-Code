@@ -1001,45 +1001,48 @@ data = '''
 44 45 48 51 52 54
 '''.strip()
 
+def check_safety(line, increasing):
+    if increasing:
+        for i, num in enumerate(line[1:], 1):
+            if not (-4 < (line[i-1] - num) < 0):
+                return False, i
+        return True, i
+    else:
+        for i, num in enumerate(line[1:], 1):
+            if not (0 < (line[i-1] - num) < 4):
+                return False, i
+        return True, i
+
+
 lines = [list(map(int, row.split())) for row in data.split("\n")]
 
 safe = 0
 
 for line in lines:
-    len_line = len(line)
-    print(line)
-    is_Safe = True
-    if line[0] < line[1]:
-        print("<")
-        for i in range(1, len_line):
-            # print(line[i-1])
-            # print(line[i])
-            # print(line[i-1] < line[i])
-            # print(abs(line[i-1] - line[i]))
-            # print(0 < abs(line[i-1] - line[i]) < 4)
-            if (line[i-1] < line[i]) and (0 < abs(line[i-1] - line[i]) < 4):
-                pass
-            else:
-                is_Safe = False
-                break
-    else:
-        print(">")
-        for i in range(1, len_line):
-            # print(line[i-1])
-            # print(line[i])
-            # print(line[i-1] > line[i])
-            # print(abs(line[i-1] - line[i]))
-            # print(0 < abs(line[i-1] - line[i]) < 4)
-            if (line[i-1] > line[i]) and (0 < abs(line[i-1] - line[i]) < 4):
-                pass
-            else:
-                is_Safe = False
-                break
-    
 
-    if is_Safe:
-        print(str(line) + " Safe")
+    print(line)
+
+    is_Safe = True
+    secondChancea = True
+    secondChancea = True
+
+    increasing = line[0] < line[-1]
+
+    is_Safe, i = check_safety(line, increasing)
+
+    if not is_Safe:
+        
+        linea = line[:i-1] + line[i:]
+        lineb = line[:i] + line[i+1:]
+
+        secondChancea, _ = check_safety(linea, increasing)
+        secondChanceb, _ = check_safety(lineb, increasing)
+
+    if secondChancea or secondChanceb:
+        print("Safe")
         safe += 1
+    else:
+        print("Unsafe")
 
 print(safe)
 
